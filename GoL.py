@@ -4,6 +4,7 @@ import pygame as pg
 
 BLACK=(0,0,0)
 WHITE=(255,255,255)
+DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (1, -1), (1, 1), (1, 0), (0, 1)]
 pixel_size=8
 
 class GoL():
@@ -43,97 +44,11 @@ class GoL():
         for row in range(self.rows):
                 for column in range(self.columns):
                     neighbours = 0
-
-                    if row!=0 and column!=0 and row!=(self.rows-1) and column!=(self.columns-1):
-                        if self.seed[row-1][column]==1:
-                            neighbours+=1
-                        if self.seed[row-1][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column-1]==1:
-                            neighbours+=1
-                        if self.seed[row][column-1]==1:
-                            neighbours+=1
-                        if self.seed[row-1][column-1]==1:
-                            neighbours+=1
-                    elif row==0 and column!=0 and column!=(self.columns-1):
-                        if self.seed[row][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column-1]==1:
-                            neighbours+=1
-                        if self.seed[row][column-1]==1:
-                            neighbours+=1
-                    elif column==(self.columns-1) and row!=0 and row!=(self.rows-1):
-                        if self.seed[row-1][column]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column-1]==1:
-                            neighbours+=1
-                        if self.seed[row][column-1]==1:
-                            neighbours+=1
-                        if self.seed[row-1][column-1]==1:
-                            neighbours+=1
-                    elif row==(self.rows-1) and column!=0 and column!=(self.columns-1):
-                        if self.seed[row-1][column]==1:
-                            neighbours+=1
-                        if self.seed[row-1][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row][column-1]==1:
-                            neighbours+=1
-                        if self.seed[row-1][column-1]==1:
-                            neighbours+=1
-                    elif column==0 and row!=0 and row!=(self.rows-1):
-                        if self.seed[row-1][column]==1:
-                            neighbours+=1
-                        if self.seed[row-1][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column+1]==1:
-                            neighbours+=1
-                        if self.seed[row+1][column]==1:
-                            neighbours+=1
-                    else:
-                        if row==0 and column==0:
-                            if self.seed[row][column+1]==1:
-                                neighbours+=1
-                            if self.seed[row+1][column+1]==1:
-                                neighbours+=1
-                            if self.seed[row+1][column]==1:
-                                neighbours+=1
-                        elif row==0 and column==(self.columns-1):
-                            if self.seed[row][column-1]==1:
-                                neighbours+=1
-                            if self.seed[row+1][column-1]==1:
-                                neighbours+=1
-                            if self.seed[row+1][column]==1:
-                                neighbours+=1
-                        elif row==(self.rows-1) and column==0:
-                            if self.seed[row-1][column]==1:
-                                neighbours+=1
-                            if self.seed[row-1][column+1]==1:
-                                neighbours+=1
-                            if self.seed[row][column+1]==1:
-                                neighbours+=1
-                        elif row==(self.rows-1) and column==(self.columns-1):
-                            if self.seed[row-1][column]==1:
-                                neighbours+=1
-                            if self.seed[row-1][column-1]==1:
-                                neighbours+=1
-                            if self.seed[row][column-1]==1:
-                                neighbours+=1
+					for directions in DIRECTIONS:
+						new_node = np.array([row, column]) + np.array(directions)
+						if 0<=new_node[0]<rows and 0<=new_node[1]<columns:
+							if seed[new_node[0]][new_node[1]] == 1:
+								neighbours += 1
                     if ((neighbours==3 or neighbours==2) and self.seed[row][column] == 1) or (neighbours==3 and self.seed[row][column] == 0):
                         seed_new[row][column] = 1
         return seed_new
